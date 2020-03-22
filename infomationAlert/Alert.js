@@ -1,18 +1,26 @@
 (function () {
     class Alert {
         constructor() {
+            // get body element
             this.body = document.querySelector("body");
+            // get alert-box element
             this.alertBoxElement = this.createAlertBox();
+            // message array
             this.array = [];
+            // statistics message executions
             this.messageCount = 0;
+            // add css to html
             this.createStyle();
             let _this = this;
+            // execute function after listening to animation
             window.addEventListener("animationend", function () {
                 _this.shift(_this);
             })
         }
 
+        // create style and add css
         createStyle() {
+            // css
             let css = `
 .alert-box{
     text-align: center;
@@ -60,22 +68,29 @@
     border-color: #f5c6cb;
 }
             `;
+            // style element
             let style = document.createElement("style");
+            // add css to style
             style.innerHTML = css;
+            // add style to head
             document.querySelector("head").append(style)
         }
 
+        // add message to message array
         message(type, message) {
             this.array.push({
                 type,
                 message
             })
+            // add element to array
             this.array[this.messageCount].dom = this.createAlert(type, message);
+            // cumulative message execution function
             this.messageCount++;
         }
 
+        // create alert element
         createAlert(type, message) {
-            message = message || "success";
+            type = type || "success";
             let alertElement = document.createElement("div");
             alertElement.classList.add("alert")
             alertElement.classList.add(`alert-${type}`)
@@ -84,6 +99,7 @@
             return alertElement;
         }
 
+        // create alert-box element
         createAlertBox() {
             let alertBoxElement = document.createElement("div");
             alertBoxElement.classList.add("alert-box");
@@ -91,13 +107,16 @@
             return alertBoxElement;
         }
 
+        // remove first array element
         shift(_this) {
             _this.array[0] && _this.array[0].dom && _this.alertBoxElement.removeChild(_this.array[0].dom);
             _this.array.length && _this.array.shift();
         }
     }
 
+    // get a examples
     const alert = new Alert();
+    // bind alert.message to windows.message
     window.message = function (type, message) {
         alert.message(type, message)
     }
